@@ -16,16 +16,8 @@ class LoginPage:
     def __init__(self, page: Page) -> None:
         self.page = page
         self.base_url = config.TICKTICK_URL_SIGNIN
-        self.__user = (
-            os.getenv("TICKTICK_USERNAME")
-            or os.getenv("TICKTICK_USER")
-            or os.getenv("USER")
-        )
-        self.__pass = (
-            os.getenv("TICKTICK_PASSWORD")
-            or os.getenv("TICKTICK_PASS")
-            or os.getenv("PASS")
-        )
+        self.__user = os.getenv("TICKTICK_USERNAME")
+        self.__pass = os.getenv("TICKTICK_PASSWORD")
 
         assert self.base_url, "TICKTICK_URL_SIGNIN is not set"
 
@@ -111,15 +103,7 @@ class LoginPage:
         self.page.goto(self.base_url)
         self._open_sign_in_if_needed()
         self._fill_first_visible(
-            [
-                "input[name='username']",
-                "input[name='email']",
-                "input[type='email']",
-                "input[autocomplete='username']",
-                "input[placeholder*='Email' i]",
-                "input[placeholder*='Username' i]",
-                "input[placeholder*='Phone' i]",
-            ],
+            ["input[autocomplete='username']", "input[placeholder*='Email' i]"],
             self.__user,
             "TickTick username/email field",
         )
@@ -127,7 +111,6 @@ class LoginPage:
             [
                 "input[name='password']",
                 "input[type='password']",
-                "input[autocomplete='current-password']",
                 "input[placeholder*='Password' i]",
             ],
             self.__pass,
@@ -135,10 +118,7 @@ class LoginPage:
         )
         self._click_first_visible(
             [
-                "button[type='submit']",
                 "button:has-text('Sign In')",
-                "button:has-text('Log In')",
-                "button:has-text('Login')",
             ],
             "TickTick sign-in button",
         )
