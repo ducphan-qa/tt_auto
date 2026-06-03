@@ -27,7 +27,6 @@ jobs:
       PROJECT_ID: ${{ secrets.PROJECT_ID }}
       TICKTICK_USERNAME: ${{ secrets.TICKTICK_USER }}
       TICKTICK_PASSWORD: ${{ secrets.TICKTICK_PASS }}
-      TICKTICK_STATE_PATH: ${{ runner.temp }}/ticktick-state.json
 
     steps:
       - uses: actions/checkout@v5
@@ -55,6 +54,9 @@ jobs:
 
       - name: Install Playwright browser
         run: uv run python -m playwright install --with-deps chromium
+
+      - name: Set TickTick state path
+        run: echo "TICKTICK_STATE_PATH=$RUNNER_TEMP/ticktick-state.json" >> "$GITHUB_ENV"
 
       - name: Generate TickTick login state
         if: github.event_name != 'pull_request'

@@ -262,17 +262,44 @@ pages/
 
 ## Environment Variables
 
-Create a `.env` file in the project root.
+Create a `.env` file in the project root for local test runs. Do not upload this
+file to GitHub and do not commit it to source control.
 
 ```env
-BASE_URL=https://api.ticktick.com
-WEB_URL=https://ticktick.com/webapp
-USERNAME=your_username
-PASSWORD=your_password
-ACCESS_TOKEN=your_access_token
+TICKTICK_API_URL=https://api.ticktick.com/api/v2
+API_KEY=replace_with_ticktick_api_key
+PROJECT_ID=replace_with_ticktick_project_id
+TICKTICK_USERNAME=replace_with_ticktick_username
+TICKTICK_PASSWORD=replace_with_ticktick_password
+TICKTICK_STATE_PATH=pages/web/state.json
 ```
 
-Do not commit `.env` to source control.
+`TICKTICK_STATE_PATH` is optional for local runs. If it is not set, the project
+uses `pages/web/state.json`.
+
+### GitHub Actions CI Secrets
+
+For CI, add these repository secrets in GitHub:
+
+1. Open your GitHub repository.
+2. Go to `Settings` -> `Secrets and variables` -> `Actions`.
+3. Select `New repository secret`.
+4. Add each secret below exactly by name.
+
+| Secret name | Value |
+|---|---|
+| `TICKTICK_API_URL` | TickTick API base URL, for example `https://api.ticktick.com/api/v2` |
+| `API_KEY` | TickTick API bearer token |
+| `PROJECT_ID` | Project/list ID used by API tests |
+| `TICKTICK_USER` | TickTick login username or email for CI |
+| `TICKTICK_PASS` | TickTick login password for CI |
+
+Do not create a GitHub secret for `TICKTICK_STATE_PATH`. The workflow creates it
+automatically from `$RUNNER_TEMP` so the Playwright login state stays outside the
+repository workspace.
+
+The CI workflow maps `TICKTICK_USER` and `TICKTICK_PASS` into the runtime
+environment variables `TICKTICK_USERNAME` and `TICKTICK_PASSWORD`.
 
 Recommended `.gitignore`:
 
