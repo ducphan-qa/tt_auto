@@ -1,0 +1,123 @@
+ticktick_automation/
+|-- .github/
+|   `-- workflows/
+|       `-- playwright.yml
+|-- .gitignore
+|-- .python-version
+|-- conftest.py
+|-- FUNCTION_AND_TEST_RULES.md
+|-- pages/
+|   |-- api/
+|   |   |-- main_api.py
+|   |   |-- project_organize.py
+|   |   |-- task_organize.py
+|   |   `-- verify_funtions.py
+|   |-- helper/
+|   |   |-- api_web_helpers.py
+|   |   |-- project_web_helpers.py
+|   |   `-- regression_helpers.py
+|   `-- web/
+|       |-- config.py
+|       |-- generate_state.py
+|       |-- locators/
+|       |   |-- detail_view.py
+|       |   |-- project_list_scroller_elements.py
+|       |   |-- sidebar_elements.py
+|       |   `-- task_list_view_elements.py
+|       |-- login_page.py
+|       |-- side_bar.py
+|       `-- view_contents.py
+|-- project_tree.txt
+|-- pyproject.toml
+|-- pytest.ini
+|-- README.md
+|-- requirements.txt
+|-- run_test.py
+|-- sync_testcases.bat
+|-- tests/
+|   |-- __init__.py
+|   |-- api_and_web_intergration/
+|   |   |-- __init__.py
+|   |   |-- test_CAPIWEB_TC01.py
+|   |   |-- test_CAPIWEB_TC02.py
+|   |   |-- test_CAPIWEB_TC03.py
+|   |   |-- test_CAPIWEB_TC04.py
+|   |   |-- test_CAPIWEB_TC05.py
+|   |   |-- test_CAPIWEB_TC06.py
+|   |   |-- test_CAPIWEB_TC07.py
+|   |   |-- test_MAPIWEB_TC09.py
+|   |   |-- test_UAPIWEB_TC08.py
+|   |   `-- test_UAPIWEB_TC10.py
+|   |-- project_organize_api/
+|   |   |-- test_CP_TC01.py
+|   |   |-- test_CP_TC02.py
+|   |   |-- test_CP_TC03.py
+|   |   |-- test_CP_TC04.py
+|   |   |-- test_CP_TC05.py
+|   |   |-- test_DP_TC05.py
+|   |   |-- test_GIDP_TC03.py
+|   |   |-- test_GUP_TC02.py
+|   |   `-- test_UP_TC04.py
+|   |-- task_organize_api/
+|   |   |-- test_CT_TC01.py
+|   |   |-- test_CT_TC02.py
+|   |   |-- test_CT_TC03.py
+|   |   |-- test_CT_TC04.py
+|   |   |-- test_CT_TC05.py
+|   |   |-- test_UT_TC06.py
+|   |   |-- test_UT_TC07.py
+|   |   |-- test_UT_TC08.py
+|   |   |-- test_UT_TC09.py
+|   |   `-- test_UT_TC10.py
+|   |-- task_project_organize_on_web/
+|   |   |-- test_CWEB_TC04.py
+|   |   |-- test_CWEB_TC05.py
+|   |   |-- test_CWEB_TC06.py
+|   |   |-- test_CWEB_TC07.py
+|   |   |-- test_CWEB_TC08.py
+|   |   |-- test_CWEB_TC09.py
+|   |   |-- test_CWEB_TC10.py
+|   |   |-- test_CWEB_TC11.py
+|   |   |-- test_CWEB_TC17.py
+|   |   |-- test_GWEB_TC12.py
+|   |   |-- test_GWEB_TC13.py
+|   |   |-- test_GWEB_TC14.py
+|   |   |-- test_UWEB_TC15.py
+|   |   |-- test_UWEB_TC16.py
+|   |   |-- test_VWEB_TC01.py
+|   |   |-- test_VWEB_TC02.py
+|   |   |-- test_VWEB_TC03.py
+|   |   |-- test_VWEB_TC18.py
+|   |   |-- test_VWEB_TC19.py
+|   |   |-- test_VWEB_TC20.py
+|   |   |-- test_VWEB_TC21.py
+|   |   `-- test_VWEB_TC22.py
+|   |-- task_project_regression_api/
+|   |   |-- __init__.py
+|   |   |-- test_CIPT_TC03.py
+|   |   |-- test_CIPT_TC04.py
+|   |   |-- test_CIPT_TC14.py
+|   |   |-- test_COMIPT_TC19.py
+|   |   |-- test_DIPT_TC07.py
+|   |   |-- test_DIPT_TC08.py
+|   |   |-- test_FIPT_TC16.py
+|   |   |-- test_FIPT_TC20.py
+|   |   |-- test_GIPT_TC01.py
+|   |   |-- test_GIPT_TC02.py
+|   |   |-- test_GIPT_TC17.py
+|   |   |-- test_MIPT_TC01.py
+|   |   |-- test_MIPT_TC02.py
+|   |   |-- test_MIPT_TC03.py
+|   |   |-- test_MIPT_TC04.py
+|   |   |-- test_MIPT_TC05.py
+|   |   |-- test_MIPT_TC11.py
+|   |   |-- test_MIPT_TC12.py
+|   |   |-- test_MIPT_TC13.py
+|   |   |-- test_UIPT_TC05.py
+|   |   |-- test_UIPT_TC06.py
+|   |   |-- test_UIPT_TC09.py
+|   |   |-- test_UIPT_TC10.py
+|   |   |-- test_UIPT_TC15.py
+|   |   `-- test_UIPT_TC18.py
+|   `-- test_LWEB_TC01.py
+`-- uv.lock

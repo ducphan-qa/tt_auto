@@ -1,0 +1,54 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Python-generated files
+__pycache__/
+*.py[cod]
+build/
+dist/
+wheels/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Browser session state and Playwright artifacts
+pages/web/state.json
+storage_state*.json
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+testcases_details/
+sync_testcases.bat
+run_test.py
+
+# Generated test reports, logs, and screenshots
+allure_report/
+allure-results/
+allure-report*/
+reports/*
+reports/
+!reports/config/
+!reports/config/*.css
+
+# Local editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
