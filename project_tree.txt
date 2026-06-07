@@ -1,7 +1,8 @@
 ticktick_automation/
 |-- .github/
 |   `-- workflows/
-|       `-- playwright.yml
+|       `-- regression_tests.yml
+|       `-- sanity_tests.yml
 |-- .gitignore
 |-- .python-version
 |-- conftest.py
