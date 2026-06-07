@@ -67,29 +67,7 @@ jobs:
         run: |
           mkdir -p reports/site
           touch reports/site/.nojekyll
-          cat > reports/site/index.html <<'HTML'
-          <!doctype html>
-          <html lang="en">
-            <head>
-              <meta charset="utf-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1">
-              <title>TickTick Automation Reports</title>
-              <style>
-                body { font-family: Arial, sans-serif; margin: 2rem; line-height: 1.5; }
-                main { max-width: 720px; }
-                a { display: block; margin: 0.75rem 0; font-size: 1.1rem; }
-              </style>
-            </head>
-            <body>
-              <main>
-                <h1>TickTick Automation Reports</h1>
-                <p>Latest published pytest HTML reports.</p>
-                <a href="./sanity/">Sanity report</a>
-                <a href="./regression/">Regression report</a>
-              </main>
-            </body>
-          </html>
-          HTML
+          cp index.html reports/site/index.html
 
       - name: Upload regression HTML report
         if: always()
