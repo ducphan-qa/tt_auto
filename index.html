@@ -5,17 +5,373 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TickTick Automation Reports</title>
     <style>
-      body { font-family: Arial, sans-serif; margin: 2rem; line-height: 1.5; }
-      main { max-width: 720px; }
-      a { display: block; margin: 0.75rem 0; font-size: 1.1rem; }
+      :root {
+        color-scheme: light;
+        --page: #f7f8fa;
+        --surface: #ffffff;
+        --surface-soft: #eef8f2;
+        --text: #172033;
+        --muted: #5e6a7d;
+        --line: #dbe3ea;
+        --green: #2f9e62;
+        --blue: #2563eb;
+        --amber: #b26a00;
+        --shadow: 0 18px 45px rgba(23, 32, 51, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        color: var(--text);
+        background:
+          linear-gradient(135deg, rgba(47, 158, 98, 0.14), transparent 34rem),
+          linear-gradient(315deg, rgba(37, 99, 235, 0.12), transparent 30rem),
+          var(--page);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .shell {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 48px 0;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 28px;
+        align-items: end;
+        padding-bottom: 28px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0 0 16px;
+        color: var(--green);
+        font-size: 0.84rem;
+        font-weight: 800;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .eyebrow::before {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 0 6px rgba(47, 158, 98, 0.16);
+        content: "";
+      }
+
+      h1 {
+        max-width: 780px;
+        margin: 0;
+        font-size: clamp(2.25rem, 5vw, 4.75rem);
+        line-height: 0.98;
+        letter-spacing: 0;
+      }
+
+      .hero p {
+        max-width: 660px;
+        margin: 20px 0 0;
+        color: var(--muted);
+        font-size: 1.08rem;
+        line-height: 1.7;
+      }
+
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        min-width: 360px;
+      }
+
+      .metric {
+        min-height: 96px;
+        padding: 16px;
+        border: 1px solid rgba(219, 227, 234, 0.9);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.76);
+      }
+
+      .metric strong {
+        display: block;
+        font-size: 1.6rem;
+        line-height: 1;
+      }
+
+      .metric span {
+        display: block;
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      .reports {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 16px;
+      }
+
+      .report-card {
+        display: grid;
+        min-height: 320px;
+        padding: 28px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+
+      .report-card header {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        align-items: flex-start;
+      }
+
+      .report-icon {
+        display: grid;
+        width: 54px;
+        height: 54px;
+        flex: 0 0 auto;
+        place-items: center;
+        border-radius: 8px;
+        background: var(--surface-soft);
+        color: var(--green);
+      }
+
+      .report-icon svg {
+        width: 28px;
+        height: 28px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 1.55rem;
+        letter-spacing: 0;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--muted);
+        background: #fbfcfd;
+        font-size: 0.78rem;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .report-card p {
+        margin: 22px 0 0;
+        color: var(--muted);
+        font-size: 1rem;
+        line-height: 1.65;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-self: end;
+        margin-top: 32px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0 18px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        background: var(--text);
+        color: #ffffff;
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .button.secondary {
+        border-color: var(--line);
+        background: #ffffff;
+        color: var(--text);
+      }
+
+      .button:focus-visible {
+        outline: 3px solid rgba(37, 99, 235, 0.35);
+        outline-offset: 3px;
+      }
+
+      .button:hover {
+        transform: translateY(-1px);
+      }
+
+      .note {
+        margin-top: 18px;
+        padding: 18px 20px;
+        border: 1px solid rgba(178, 106, 0, 0.28);
+        border-radius: 8px;
+        background: rgba(255, 248, 232, 0.84);
+        color: #704600;
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      footer {
+        margin-top: 26px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 900px) {
+        .hero,
+        .reports {
+          grid-template-columns: 1fr;
+        }
+
+        .summary {
+          min-width: 0;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .shell {
+          width: min(100% - 24px, 1120px);
+          padding: 28px 0;
+        }
+
+        .summary {
+          grid-template-columns: 1fr;
+        }
+
+        .report-card {
+          min-height: auto;
+          padding: 22px;
+        }
+
+        .report-card header {
+          display: grid;
+        }
+
+        .tag {
+          width: fit-content;
+        }
+
+        .actions {
+          display: grid;
+        }
+
+        .button {
+          width: 100%;
+        }
+      }
     </style>
   </head>
   <body>
-    <main>
-      <h1>TickTick Automation Reports</h1>
-      <p>Latest published pytest HTML reports.</p>
-      <a href="./sanity/">Sanity report</a>
-      <a href="./regression/">Regression report</a>
+    <main class="shell">
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">GitHub Pages dashboard</p>
+          <h1 id="page-title">TickTick Automation Reports</h1>
+          <p>
+            Latest published pytest HTML reports for the TickTick Playwright automation suite.
+            Use the cards below to open the current sanity or regression report.
+          </p>
+        </div>
+
+        <div class="summary" aria-label="Report summary">
+          <div class="metric">
+            <strong>2</strong>
+            <span>Report suites</span>
+          </div>
+          <div class="metric">
+            <strong>UI</strong>
+            <span>Playwright checks</span>
+          </div>
+          <div class="metric">
+            <strong>HTML</strong>
+            <span>Self-contained reports</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="reports" aria-label="Published reports">
+        <article class="report-card">
+          <header>
+            <div>
+              <h2>Sanity Report</h2>
+              <span class="tag">Push and pull request</span>
+            </div>
+            <div class="report-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" role="img">
+                <path d="M20 7 9 18l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+          </header>
+          <p>
+            Fast confidence checks for core TickTick automation flows. If the link is not
+            available yet, the sanity workflow has not published a report to this site.
+          </p>
+          <div class="actions">
+            <a class="button" href="./sanity/">Open sanity report</a>
+            <a class="button secondary" href="./sanity/index.html">Open HTML file</a>
+          </div>
+        </article>
+
+        <article class="report-card">
+          <header>
+            <div>
+              <h2>Regression Report</h2>
+              <span class="tag">Manual workflow</span>
+            </div>
+            <div class="report-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" role="img">
+                <path d="M4 5h16M4 12h16M4 19h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+              </svg>
+            </div>
+          </header>
+          <p>
+            Broader regression coverage for the automation suite. If the link is not
+            available yet, run the regression workflow and publish its report.
+          </p>
+          <div class="actions">
+            <a class="button" href="./regression/">Open regression report</a>
+            <a class="button secondary" href="./regression/index.html">Open HTML file</a>
+          </div>
+        </article>
+      </section>
+
+      <p class="note">
+        Reports are replaced by the latest successful publication for each workflow. Failure
+        artifacts remain available from the corresponding GitHub Actions run.
+      </p>
+
+      <footer>
+        TickTick automation CI reports published from GitHub Actions.
+      </footer>
     </main>
   </body>
 </html>
