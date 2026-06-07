@@ -271,11 +271,21 @@ API_KEY=replace_with_ticktick_api_key
 PROJECT_ID=replace_with_ticktick_project_id
 TICKTICK_USERNAME=replace_with_ticktick_username
 TICKTICK_PASSWORD=replace_with_ticktick_password
-TICKTICK_STATE_PATH=pages/web/state.json
+TICKTICK_STATE_PATH=.auth/ticktick-state.json
 ```
 
 `TICKTICK_STATE_PATH` is optional for local runs. If it is not set, the project
-uses `pages/web/state.json`.
+uses `.auth/ticktick-state.json`.
+
+Security notes:
+
+- Never commit `.env`, browser storage state, cookies, session files, traces,
+  screenshots, logs, or generated reports.
+- Treat pytest-html reports, screenshots, Playwright traces, and failure logs as
+  sensitive when tests run against a real TickTick account.
+- In CI, failure screenshots are disabled by default. Set
+  `ATTACH_FAILURE_SCREENSHOTS=true` only for trusted runs where uploaded
+  artifacts are safe to retain.
 
 ### GitHub Actions CI Secrets
 
@@ -305,7 +315,8 @@ environment variables `TICKTICK_USERNAME` and `TICKTICK_PASSWORD`.
 
 This project can generate a pytest HTML report after tests finish. The report is
 a normal `index.html` file, so you can open it in a browser or publish it with
-GitHub Pages.
+GitHub Pages. Reports can include test names, logs, and screenshots, so treat
+them as sensitive when they are created from a real TickTick account.
 
 #### Generate a local HTML report
 
@@ -347,9 +358,21 @@ The GitHub Actions workflows also generate HTML reports automatically:
 Each workflow run also uploads the HTML report as a GitHub Actions artifact. You
 can download it from the workflow run page under `Artifacts`.
 
+Failure artifacts have short retention and exclude known auth/session files.
+They can still contain private task or project data through traces, screenshots,
+or logs, so only enable rich failure media for trusted runs.
+
 #### Publish reports with GitHub Pages
 
-To publish the reports publicly:
+The CI workflows publish the latest report dashboard to the `gh-pages` branch.
+Only the dedicated publishing jobs receive `contents: write`; test jobs use
+read-only repository permissions.
+
+If the repository or GitHub Pages site is public, published reports are public.
+Use isolated test data or a dedicated non-personal TickTick account before
+enabling public Pages.
+
+To enable GitHub Pages:
 
 1. Push the workflow changes to GitHub.
 2. Open your GitHub repository.
@@ -373,11 +396,29 @@ Recommended `.gitignore`:
 
 ```gitignore
 .env
+.env.*
+!.env.example
+.auth/
+auth/
+session/
+sessions/
+*.key
+*.pem
+*.p12
 .venv/
 __pycache__/
 .pytest_cache/
 test-results/
 playwright-report/
+blob-report/
+storage_state*.json
+*storage*state*.json
+*cookies*.json
+*session*.json
+reports/
+allure_report/
+allure-results/
+allure-report*/
 ```
 
 ---

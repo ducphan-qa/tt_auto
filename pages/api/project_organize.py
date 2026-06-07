@@ -43,9 +43,8 @@ class ProjectOrganize:
                 return response_json
 
             logging.error(
-                "Cannot fetch all projects. Status: %s. Response body: %s",
+                "Cannot fetch all projects. Status: %s.",
                 response.status,
-                self.verify_funtion._get_response_text(response),
             )
             return None
         except Exception as error:
@@ -80,10 +79,9 @@ class ProjectOrganize:
 
                 logging.error(
                     "Cannot verify deleted project ID %s. Expected status: 404. "
-                    "Actual status: %s. Response body: %s",
+                    "Actual status: %s.",
                     project_id,
                     response.status,
-                    self.verify_funtion._get_response_text(response),
                 )
                 return None
 
@@ -93,18 +91,16 @@ class ProjectOrganize:
                 self.verify_funtion.assert_json_not_empty(response)
                 response_json = response.json()
                 logging.debug("Project ID is: %s", response_json.get("id"))
-                logging.debug("Project name is: %s", response_json.get("name"))
                 logging.debug("Project color is: %s", response_json.get("color"))
                 logging.debug("Project kind is: %s", response_json.get("kind"))
                 return response_json
 
             logging.error(
                 "Cannot fetch project ID %s. Expected status: %s. Actual status: "
-                "%s. Response body: %s",
+                "%s.",
                 project_id,
                 expected_status,
                 response.status,
-                self.verify_funtion._get_response_text(response),
             )
             return None
         except Exception as error:
@@ -135,10 +131,9 @@ class ProjectOrganize:
                 return response_json
 
             logging.error(
-                "Cannot fetch project data ID %s. Status: %s. Response body: %s",
+                "Cannot fetch project data ID %s. Status: %s.",
                 project_id,
                 response.status,
-                self.verify_funtion._get_response_text(response),
             )
             return None
         except Exception as error:
@@ -152,7 +147,7 @@ class ProjectOrganize:
     def create_project(self, body):
         try:
             logging.info("Sending POST request to create project")
-            logging.debug("Create project request body: %s", body)
+            logging.debug("Create project request includes keys: %s", sorted(body.keys()))
             response = self._send_request("post", f"{BASE_PATH}/project", data=body)
 
             self.verify_funtion.assert_status(response, 200)
@@ -161,7 +156,6 @@ class ProjectOrganize:
             if response.status == 200:
                 response_json = response.json()
                 logging.debug("Created project ID is: %s", response_json.get("id"))
-                logging.debug("Created project name is: %s", response_json.get("name"))
                 logging.debug(
                     "Created project color is: %s", response_json.get("color")
                 )
@@ -169,9 +163,8 @@ class ProjectOrganize:
                 return response_json
 
             logging.error(
-                "Cannot create project. Status: %s. Response body: %s",
+                "Cannot create project. Status: %s.",
                 response.status,
-                self.verify_funtion._get_response_text(response),
             )
             return None
         except Exception as error:
@@ -181,7 +174,7 @@ class ProjectOrganize:
     def update_project(self, project_id, body, expected_status: int = 200):
         try:
             logging.info("Sending POST request to update project ID: %s", project_id)
-            logging.debug("Update project request body: %s", body)
+            logging.debug("Update project request includes keys: %s", sorted(body.keys()))
             response = self._send_request(
                 "post",
                 f"{BASE_PATH}/project/{project_id}",
@@ -194,18 +187,16 @@ class ProjectOrganize:
                 self.verify_funtion.assert_json_not_empty(response)
                 response_json = response.json()
                 logging.debug("Updated project ID is: %s", response_json.get("id"))
-                logging.debug("Updated project name is: %s", response_json.get("name"))
                 logging.debug("Updated project color is: %s", response_json.get("color"))
                 logging.debug("Updated project kind is: %s", response_json.get("kind"))
                 return response_json
 
             logging.error(
                 "Cannot update project ID %s. Expected status: %s. Actual status: "
-                "%s. Response body: %s",
+                "%s.",
                 project_id,
                 expected_status,
                 response.status,
-                self.verify_funtion._get_response_text(response),
             )
             return None
         except Exception as error:
@@ -228,10 +219,9 @@ class ProjectOrganize:
                 return response
 
             logging.error(
-                "Cannot delete project ID %s. Status: %s. Response body: %s",
+                "Cannot delete project ID %s. Status: %s.",
                 project_id,
                 response.status,
-                self.verify_funtion._get_response_text(response),
             )
             return None
         except Exception as error:

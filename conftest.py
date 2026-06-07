@@ -108,6 +108,11 @@ def pytest_runtest_makereport(item, call):
 
 
 def _capture_and_attach_failure_screenshot(item, report):
+    attach_failure_screenshots = os.getenv("ATTACH_FAILURE_SCREENSHOTS", "").lower()
+    screenshots_enabled = attach_failure_screenshots in {"1", "true", "yes", "on"}
+    if os.getenv("CI", "").lower() == "true" and not screenshots_enabled:
+        return
+
     page = item.funcargs.get("authenticated_page") or item.funcargs.get("page")
     if not page:
         return

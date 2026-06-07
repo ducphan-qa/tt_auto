@@ -92,24 +92,22 @@ class TaskOrganize:
 
                 logging.error(
                     "Cannot verify deleted task ID %s from project ID %s. "
-                    "Expected status: %s. Actual status: %s. Response body: %s",
+                    "Expected status: %s. Actual status: %s.",
                     task_id,
                     project_id,
                     expected_statuses,
                     response.status,
-                    self.verify_funtion._get_response_text(response),
                 )
                 return None
 
             if response.status not in expected_statuses:
                 logging.error(
                     "Cannot fetch task ID %s from project ID %s. Expected status: "
-                    "%s. Actual status: %s. Response body: %s",
+                    "%s. Actual status: %s.",
                     task_id,
                     project_id,
                     expected_statuses,
                     response.status,
-                    self.verify_funtion._get_response_text(response),
                 )
                 return None
 
@@ -117,8 +115,6 @@ class TaskOrganize:
                 self.verify_funtion._assert_json_not_empty(response)
                 response_json = response.json()
                 logging.debug("Task ID is: %s", response_json.get("id"))
-                logging.debug("Task title is: %s", response_json.get("title"))
-                logging.debug("Task content is: %s", response_json.get("content"))
                 logging.debug("Task project ID is: %s", response_json.get("projectId"))
                 logging.debug("Task priority is: %s", response_json.get("priority"))
                 return response_json
@@ -156,18 +152,17 @@ class TaskOrganize:
                 "Sending POST request to create task in project ID: %s",
                 project_id,
             )
-            logging.debug("Create task request body: %s", body)
+            logging.debug("Create task request includes keys: %s", sorted(body.keys()))
             response = self._send_request("post", f"{BASE_PATH}/task", data=body)
             expected_statuses = self._expected_statuses(expected_status)
 
             if response.status not in expected_statuses:
                 logging.error(
                     "Cannot create task in project ID %s. Expected status: %s. "
-                    "Actual status: %s. Response body: %s",
+                    "Actual status: %s.",
                     project_id,
                     expected_statuses,
                     response.status,
-                    self.verify_funtion._get_response_text(response),
                 )
                 return None
 
@@ -175,10 +170,6 @@ class TaskOrganize:
                 self.verify_funtion._assert_json_not_empty(response)
                 response_json = response.json()
                 logging.debug("Created task ID is: %s", response_json.get("id"))
-                logging.debug("Created task title is: %s", response_json.get("title"))
-                logging.debug(
-                    "Created task content is: %s", response_json.get("content")
-                )
                 logging.debug(
                     "Created task project ID is: %s", response_json.get("projectId")
                 )
@@ -214,12 +205,11 @@ class TaskOrganize:
             if response.status not in expected_statuses:
                 logging.error(
                     "Cannot delete task ID %s from project ID %s. Expected status: "
-                    "%s. Actual status: %s. Response body: %s",
+                    "%s. Actual status: %s.",
                     task_id,
                     project_id,
                     expected_statuses,
                     response.status,
-                    self.verify_funtion._get_response_text(response),
                 )
                 return None
 
@@ -235,7 +225,10 @@ class TaskOrganize:
     def update_task(self, task_id: str, content_dict: dict, expected_status=200):
         try:
             logging.info("Sending POST request to update task ID: %s", task_id)
-            logging.debug("Update task request body: %s", content_dict)
+            logging.debug(
+                "Update task request includes keys: %s",
+                sorted(content_dict.keys()),
+            )
             response = self._send_request(
                 "post",
                 f"{BASE_PATH}/task/{task_id}",
@@ -246,11 +239,10 @@ class TaskOrganize:
             if response.status not in expected_statuses:
                 logging.error(
                     "Cannot update task ID %s. Expected status: %s. Actual status: "
-                    "%s. Response body: %s",
+                    "%s.",
                     task_id,
                     expected_statuses,
                     response.status,
-                    self.verify_funtion._get_response_text(response),
                 )
                 return None
 
@@ -267,8 +259,6 @@ class TaskOrganize:
                 response_json = response.json()
                 logging.info("Successfully updated task ID: %s", task_id)
                 logging.debug("Updated task ID is: %s", response_json.get("id"))
-                logging.debug("Updated task title is: %s", response_json.get("title"))
-                logging.debug("Updated task content is: %s", response_json.get("content"))
                 logging.debug(
                     "Updated task project ID is: %s", response_json.get("projectId")
                 )
@@ -304,12 +294,11 @@ class TaskOrganize:
             if response.status not in expected_statuses:
                 logging.error(
                     "Cannot complete task ID %s using project ID %s. Expected "
-                    "status: %s. Actual status: %s. Response body: %s",
+                    "status: %s. Actual status: %s.",
                     task_id,
                     project_id,
                     expected_statuses,
                     response.status,
-                    self.verify_funtion._get_response_text(response),
                 )
                 return None
 
@@ -341,7 +330,7 @@ class TaskOrganize:
                 from_project_id,
                 to_project_id,
             )
-            logging.debug("Move task request body: %s", body)
+            logging.debug("Move task request contains %s item(s)", len(body))
             response = self._send_request("post", f"{BASE_PATH}/task/move", data=body)
 
             expected_statuses = (
@@ -363,13 +352,12 @@ class TaskOrganize:
 
             logging.error(
                 "Cannot move task ID %s from project ID %s to project ID %s. "
-                "Expected status: %s. Actual status: %s. Response body: %s",
+                "Expected status: %s. Actual status: %s.",
                 task_id,
                 from_project_id,
                 to_project_id,
                 expected_statuses,
                 response.status,
-                self.verify_funtion._get_response_text(response),
             )
             return None
         except Exception as error:
@@ -422,10 +410,9 @@ class TaskOrganize:
             if response.status != 200:
                 logging.error(
                     "Cannot filter tasks for project ID %s. Status: %s. "
-                    "Response body: %s",
+                    "Response body was redacted.",
                     project_id,
                     response.status,
-                    self.verify_funtion._get_response_text(response),
                 )
                 return None
 

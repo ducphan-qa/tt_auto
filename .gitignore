@@ -5,8 +5,11 @@
 *.pem
 *.key
 *.crt
+*.der
 *.p12
 *.pfx
+*.jks
+*.keystore
 
 # Python-generated files
 __pycache__/
@@ -28,8 +31,15 @@ venv/
 env/
 
 # Browser session state and Playwright artifacts
+.auth/
+auth/
+session/
+sessions/
 pages/web/state.json
 storage_state*.json
+*storage*state*.json
+*cookies*.json
+*session*.json
 test-results/
 playwright-report/
 blob-report/

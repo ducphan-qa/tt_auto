@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -12,6 +12,8 @@ concurrency:
 
 jobs:
   regression:
+    permissions:
+      contents: read
     timeout-minutes: 60
     runs-on: ubuntu-latest
 
@@ -30,7 +32,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.13"
+          python-version: "3.14"
           cache: "pip"
 
       - name: Install uv
@@ -78,15 +80,6 @@ jobs:
           if-no-files-found: warn
           path: reports/site/
 
-      - name: Publish regression HTML report to GitHub Pages
-        if: ${{ always() && github.event_name == 'workflow_dispatch' && hashFiles('reports/site/regression/index.html') != '' }}
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: ./reports/site
-          keep_files: true
-
       - name: Upload regression failure artifacts
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
@@ -100,7 +93,38 @@ jobs:
             !**/*state*.json
             !**/storage_state.json
             !**/.auth/**
+            !**/auth/**
+            !**/session/**
+            !**/sessions/**
+            !**/*cookie*.json
+            !**/.env
+            !**/.env.*
 
       - name: Clean TickTick login state
         if: always()
         run: rm -f "$TICKTICK_STATE_PATH"
+
+  publish-regression-pages:
+    needs: regression
+    if: ${{ always() && github.event_name == 'workflow_dispatch' && needs.regression.result != 'skipped' }}
+    permissions:
+      actions: read
+      contents: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download regression HTML report
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: regression-html-report-${{ github.run_number }}
+          path: reports/site
+
+      - name: Publish regression HTML report to GitHub Pages
+        if: ${{ hashFiles('reports/site/regression/index.html') != '' }}
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./reports/site
+          keep_files: true
