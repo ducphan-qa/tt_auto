@@ -301,6 +301,74 @@ repository workspace.
 The CI workflow maps `TICKTICK_USER` and `TICKTICK_PASS` into the runtime
 environment variables `TICKTICK_USERNAME` and `TICKTICK_PASSWORD`.
 
+### HTML Test Reports
+
+This project can generate a pytest HTML report after tests finish. The report is
+a normal `index.html` file, so you can open it in a browser or publish it with
+GitHub Pages.
+
+#### Generate a local HTML report
+
+Run all tests and create a local report:
+
+```bash
+uv run pytest --html=reports/site/local/index.html --self-contained-html
+```
+
+Run only sanity tests and create a report:
+
+```bash
+uv run pytest -m "sanity" --html=reports/site/sanity/index.html --self-contained-html
+```
+
+Run only regression tests and create a report:
+
+```bash
+uv run pytest -m "regression" --html=reports/site/regression/index.html --self-contained-html
+```
+
+After the command finishes, open one of these files in your browser:
+
+```text
+reports/site/local/index.html
+reports/site/sanity/index.html
+reports/site/regression/index.html
+```
+
+#### HTML reports in GitHub Actions
+
+The GitHub Actions workflows also generate HTML reports automatically:
+
+| Workflow | Report path | Public Pages path |
+|---|---|---|
+| Sanity tests | `reports/site/sanity/index.html` | `/sanity/` |
+| Regression tests | `reports/site/regression/index.html` | `/regression/` |
+
+Each workflow run also uploads the HTML report as a GitHub Actions artifact. You
+can download it from the workflow run page under `Artifacts`.
+
+#### Publish reports with GitHub Pages
+
+To publish the reports publicly:
+
+1. Push the workflow changes to GitHub.
+2. Open your GitHub repository.
+3. Go to `Settings` -> `Pages`.
+4. Under `Build and deployment`, select `Deploy from a branch`.
+5. Select branch `gh-pages`.
+6. Select folder `/root`.
+7. Save the setting.
+
+After GitHub Pages is enabled, the latest reports will be available at:
+
+```text
+https://<github-username>.github.io/<repo-name>/sanity/
+https://<github-username>.github.io/<repo-name>/regression/
+```
+
+Replace `<github-username>` and `<repo-name>` with your real GitHub account and
+repository name.
+
 Recommended `.gitignore`:
 
 ```gitignore
