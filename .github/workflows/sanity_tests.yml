@@ -78,7 +78,7 @@ jobs:
 
       - name: Upload sanity HTML report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sanity-html-report-${{ github.run_number }}
           retention-days: 14
@@ -87,7 +87,7 @@ jobs:
 
       - name: Upload sanity failure artifacts
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sanity-playwright-failure-artifacts-${{ github.run_number }}
           retention-days: 3
